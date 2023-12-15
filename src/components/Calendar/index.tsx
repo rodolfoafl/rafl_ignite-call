@@ -77,6 +77,10 @@ export default function Calendar({
   })
 
   const calendarWeeks = useMemo(() => {
+    if (!unavailableDates) {
+      return []
+    }
+
     const daysInMonthArray = Array.from({
       length: currentDate.daysInMonth(),
     }).map((_, i) => {
@@ -114,9 +118,7 @@ export default function Calendar({
           date,
           disabled:
             date.endOf('day').isBefore(new Date()) ||
-            (unavailableDates
-              ? unavailableDates.unavailableWeekDays.includes(date.get('day'))
-              : false),
+            unavailableDates.unavailableWeekDays.includes(date.get('day')),
         }
       }),
       ...nextMonthFillArray.map((date) => {
