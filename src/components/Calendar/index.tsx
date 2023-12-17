@@ -28,6 +28,7 @@ interface CalendarProps {
 
 interface UnavailableDates {
   unavailableWeekDays: number[]
+  unavailableDates: number[]
 }
 
 export default function Calendar({
@@ -68,7 +69,7 @@ export default function Calendar({
       const response = await api.get(`/users/${username}/unavailable-dates`, {
         params: {
           year: currentDate.get('year'),
-          month: currentDate.get('month'),
+          month: currentDate.get('month') + 1,
         },
       })
 
@@ -118,7 +119,8 @@ export default function Calendar({
           date,
           disabled:
             date.endOf('day').isBefore(new Date()) ||
-            unavailableDates.unavailableWeekDays.includes(date.get('day')),
+            unavailableDates.unavailableWeekDays.includes(date.get('day')) ||
+            unavailableDates.unavailableDates.includes(date.get('date')),
         }
       }),
       ...nextMonthFillArray.map((date) => {
