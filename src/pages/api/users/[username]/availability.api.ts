@@ -66,9 +66,13 @@ export default async function handle(
   })
 
   const scheduleableTimes = availableTimes.filter((time) => {
-    return !unavailableTimes.some(
+    const isTimeUnavailable = unavailableTimes.some(
       (unavailableTime) => unavailableTime.date.getHours() === time,
     )
+
+    const isTimeInPast = referenceDate.set('hour', time).isBefore(new Date())
+
+    return !isTimeUnavailable && !isTimeInPast
   })
 
   return res.json({ availableTimes, scheduleableTimes })
